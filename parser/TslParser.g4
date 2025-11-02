@@ -22,53 +22,87 @@ THE SOFTWARE.
 */
 //=============================================================================
 
-package stats
+grammar BflParser;
+import BflLexer;
 
-import "math"
-
-//=============================================================================
-
-func Average(data []float64) float64 {
-	if data == nil || len(data) == 0 {
-		return 0
-	}
-
-	sum := 0.0
-
-	for _, v := range data {
-		sum += v
-	}
-
-	return sum/float64(len(data))
-}
+script
+    : packageDef (statement)*
+    ;
 
 //=============================================================================
 
-func StdDev(data []float64, mean float64) float64 {
-	if data == nil || len(data) == 0 {
-		return 0
-	}
+packageDef
+    : PACKAGE packageName
+    ;
 
-	sum := 0.0
-
-	for _, v := range data {
-		sum += (v - mean) * (v - mean)
-	}
-
-	return math.Sqrt(sum/float64(len(data)))
-}
+packageName
+    : PACKAGE_IDENTIFIER
+    ;
 
 //=============================================================================
 
-func SharpeRatio(data []float64) float64{
-	mean   := Average(data)
-	stdDev := StdDev(data, mean)
+statement
+    : paramsDef
+    | constantsDef
+    | function
+    ;
 
-	if stdDev == 0 {
-		return 0
-	}
+//=============================================================================
 
-	return mean/stdDev
-}
+paramsDef
+    : PARAMS L_CURLY (paramDef)* R_CURLY
+    ;
+
+paramDef
+    : LC_IDENTIFIER paramType
+    ;
+
+paramType
+    : paramTypeInt
+    | paramTypeReal
+    | paramTypeString
+    | paramTypeBool
+    | paramTypeTime
+    ;
+
+paramTypeInt
+    : INT
+    ;
+
+paramTypeReal
+    : REAL
+    ;
+
+paramTypeString
+    : STRING
+    ;
+
+paramTypeBool
+    : BOOL
+    ;
+
+paramTypeTime
+    : TIME
+    ;
+
+//=============================================================================
+
+constantsDef
+    : CONST L_PAREN constantDef R_PAREN
+    ;
+
+constantDef
+    : UC_IDENTIFIER EQUAL constValue
+    ;
+
+constValue
+    :
+    ;
+
+//=============================================================================
+
+function
+    :
+    ;
 
 //=============================================================================

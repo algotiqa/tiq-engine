@@ -25,7 +25,7 @@ THE SOFTWARE.
 package session
 
 import (
-	"github.com/bit-fever/sick-engine/core"
+	"github.com/tradalia/sick-engine/core"
 	"time"
 )
 

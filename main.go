@@ -1,6 +1,6 @@
 //=============================================================================
 /*
-Copyright © 2023 Andrea Carboni andrea.carboni71@gmail.com
+Copyright © 2025 Andrea Carboni andrea.carboni71@gmail.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,28 +22,39 @@ THE SOFTWARE.
 */
 //=============================================================================
 
-package stats
+package main
 
 import (
-	"math"
-	"testing"
+	"fmt"
+	"os"
+
+	"github.com/antlr4-go/antlr/v4"
+	"github.com/tradalia/sick-engine/parser"
 )
 
 //=============================================================================
 
-var prices = []float64{ 1.64, 5.85, 9.22, 3.51, -0.88, 1.07, 13.03, 9.4, 10.49, -5.08, 0, 0 }
 
-//=============================================================================
+type TreeShapeListener struct {
+	*parser.BaseBflListener
+}
 
-func TestSharpeRatio(t *testing.T) {
-	t.Logf("Avg: %v", Average(prices))
-	t.Logf("Std: %v", StdDev(prices, Average(prices)))
-	t.Logf("SR : %v", SharpeRatio(prices, 0.05))
-	t.Logf("SRA: %v", SharpeRatio(prices, 0.05)*math.Sqrt(12))
+func NewTreeShapeListener() *TreeShapeListener {
+	return new(TreeShapeListener)
+}
 
-	//if !slices.Equal(*equ, equity) {
-	//	t.Errorf("Bad gross equity calculation. Expected %v but got %v", equity, equ)
-	//}
+func (this *TreeShapeListener) EnterEveryRule(ctx antlr.ParserRuleContext) {
+	fmt.Println(ctx.GetText())
+}
+
+func main() {
+	input, _ := antlr.NewFileStream(os.Args[1])
+	lexer  := parser.NewBflLexer(input)
+	stream := antlr.NewCommonTokenStream(lexer,0)
+	p := parser.NewBflParser(stream)
+	p.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
+	tree := p.Init()
+	antlr.ParseTreeWalkerDefault.Walk(NewTreeShapeListener(), tree)
 }
 
 //=============================================================================
