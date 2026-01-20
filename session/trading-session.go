@@ -25,8 +25,9 @@ THE SOFTWARE.
 package session
 
 import (
-	"github.com/algotiqa/tiq-engine/core"
 	"time"
+
+	"github.com/algotiqa/tiq-engine/core/data"
 )
 
 //=============================================================================
@@ -39,16 +40,16 @@ type TradingSession struct {
 
 type SessionDay struct {
 	Day    int        `json:"day"`
-	Start  *core.Time `json:"start"`
-	End    *core.Time `json:"end"`
+	Start  *data.Time `json:"start"`
+	End    *data.Time `json:"end"`
 	Pauses []*Pause   `json:"pauses"`
 }
 
 //=============================================================================
 
 type Pause struct {
-	From *core.Time `json:"from"`
-	To   *core.Time `json:"to"`
+	From *data.Time `json:"from"`
+	To   *data.Time `json:"to"`
 }
 
 //=============================================================================
@@ -59,11 +60,11 @@ type Pause struct {
 
 func (td *TradingSession) IsStartOfSession(t time.Time, timeframe int) bool {
 	h, m, _ := t.Clock()
-	time := core.NewTime(h, m).Sub(0, timeframe)
+	tim := data.NewTime(h, m).Sub(0, timeframe)
 	dow := int(t.Weekday())
 
 	for _, sd := range td.Days {
-		if sd.isStartOfSession(dow, time) {
+		if sd.isStartOfSession(dow, tim) {
 			return true
 		}
 	}
@@ -77,7 +78,7 @@ func (td *TradingSession) IsStartOfSession(t time.Time, timeframe int) bool {
 //===
 //=============================================================================
 
-func (sd *SessionDay) isStartOfSession(dow int, t *core.Time) bool {
+func (sd *SessionDay) isStartOfSession(dow int, t *data.Time) bool {
 	if dow != sd.Day {
 		return false
 	}
