@@ -1,6 +1,6 @@
 module github.com/algotiqa/tiq-engine
 
-go 1.24.2
+go 1.25.8
 
 require github.com/antlr4-go/antlr/v4 v4.13.1
 
