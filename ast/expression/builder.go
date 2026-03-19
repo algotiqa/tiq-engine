@@ -30,6 +30,7 @@ import (
 	"github.com/algotiqa/tiq-engine/core/data"
 	"github.com/algotiqa/tiq-engine/core/values"
 	"github.com/algotiqa/tiq-engine/parser"
+	"github.com/algotiqa/types"
 	"github.com/antlr4-go/antlr/v4"
 )
 
@@ -439,7 +440,7 @@ func convertConstantTime(p antlr.Parser, val parser.ITimeValueContext) values.Va
 	hh, _ := strconv.Atoi(val.INT_VALUE(0).GetText())
 	mm, _ := strconv.Atoi(val.INT_VALUE(1).GetText())
 
-	v := data.NewTime(hh, mm)
+	v := types.NewTime(hh, mm)
 
 	if !v.IsValid() {
 		parser.RaiseError(p, "Invalid time value : "+val.GetText())
@@ -455,7 +456,7 @@ func convertConstantDate(p antlr.Parser, val parser.IDateValueContext) values.Va
 	m, _ := strconv.Atoi(val.INT_VALUE(1).GetText())
 	d, _ := strconv.Atoi(val.INT_VALUE(2).GetText())
 
-	v := data.NewDate(y, m, d)
+	v := types.NewDate(y, m, d)
 
 	if !v.IsValid() {
 		parser.RaiseError(p, "Invalid date value : "+val.GetText())

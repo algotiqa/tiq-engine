@@ -25,8 +25,8 @@ THE SOFTWARE.
 package values
 
 import (
-	"github.com/algotiqa/tiq-engine/core/data"
 	"github.com/algotiqa/tiq-engine/core/types"
+	atypes "github.com/algotiqa/types"
 )
 
 //=============================================================================
@@ -36,12 +36,12 @@ import (
 //=============================================================================
 
 type TimeValue struct {
-	value *data.Time
+	value atypes.Time
 }
 
 //=============================================================================
 
-func NewTimeValue(value *data.Time) *TimeValue {
+func NewTimeValue(value atypes.Time) *TimeValue {
 	return &TimeValue{
 		value: value,
 	}
